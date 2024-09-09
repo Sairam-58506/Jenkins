@@ -3,10 +3,12 @@ pipeline {
   stages {
     stage('Back-end') {
       agent {
-        docker { image 'maven:3.8.1-adoptopenjdk-11' }
+        docker { image 'maven:3.9.1-adoptopenjdk-11' } // Updated Maven image version
       }
       steps {
         sh 'mvn --version'
+        sh 'mvn clean install'
+        sh 'java -cp target/hello-world-1.0-SNAPSHOT.jar HelloWorld'
       }
     }
     stage('Front-end') {
@@ -15,6 +17,10 @@ pipeline {
       }
       steps {
         sh 'node --version'
+        sh 'npm install'
+        sh 'npm run lint'
+        sh 'npm test'
+        sh 'npm run build'
       }
     }
   }
